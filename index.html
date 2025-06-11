@@ -1,4 +1,3 @@
-cat > index.html << 'EOF'
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -14,6 +13,7 @@ cat > index.html << 'EOF'
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             text-align: center;
+            min-height: 100vh;
         }
         .container {
             background: rgba(255, 255, 255, 0.1);
@@ -37,6 +37,7 @@ cat > index.html << 'EOF'
             background: rgba(0, 0, 0, 0.2);
             padding: 8px 12px;
             border-radius: 5px;
+            font-size: 0.9em;
         }
         .test-button {
             display: inline-block;
@@ -49,45 +50,51 @@ cat > index.html << 'EOF'
             transition: background 0.3s;
         }
         .test-button:hover { background: #45a049; }
+        .info {
+            margin-top: 30px;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🤖 Claude AI 카카오 스킬 서버</h1>
-        <div class="status">✅ 서버가 정상적으로 작동 중입니다!</div>
+        <div class="status" id="status">✅ 서버 상태 확인 중...</div>
         
         <div class="endpoints">
             <h3>📡 사용 가능한 API 엔드포인트:</h3>
             <div class="endpoint">🏥 GET /api/health - 헬스체크</div>
             <div class="endpoint">👋 POST /api/sayHello - 기본 인사</div>
-            <div class="endpoint">💬 POST /api/chat - AI 채팅</div>
-            <div class="endpoint">🌍 POST /api/translate - 번역</div>
+            <div class="endpoint">💬 POST /api/chat - AI 채팅 (준비중)</div>
+            <div class="endpoint">🌍 POST /api/translate - 번역 (준비중)</div>
         </div>
 
         <a href="/api/health" class="test-button">헬스체크 테스트</a>
         
-        <div style="margin-top: 30px; font-size: 0.9em; opacity: 0.8;">
-            <p>이 서버는 카카오 챗봇 스킬용으로 제작되었습니다.</p>
-            <p>Powered by Claude AI + Vercel</p>
+        <div class="info">
+            <p><strong>카카오 챗봇 스킬 서버</strong></p>
+            <p>Powered by Claude AI + Vercel + GitHub</p>
+            <p>실시간 AI 대화 및 번역 서비스</p>
         </div>
     </div>
 
     <script>
-        // 페이지 로드 시 헬스체크 상태 확인
+        // 페이지 로드 시 서버 상태 확인
         fetch('/api/health')
             .then(response => response.json())
             .then(data => {
-                console.log('Health check:', data);
+                const statusElement = document.getElementById('status');
                 if (data.status === 'OK') {
-                    document.querySelector('.status').innerHTML = 
-                        '✅ 서버 상태: 정상 | Claude API: ' + data.claude_api;
+                    statusElement.innerHTML = `✅ 서버 정상 작동 중! (${data.timestamp.slice(0, 19).replace('T', ' ')})`;
+                } else {
+                    statusElement.innerHTML = '⚠️ 서버 상태 확인 실패';
                 }
             })
             .catch(error => {
-                document.querySelector('.status').innerHTML = '❌ 서버 연결 확인 중...';
+                document.getElementById('status').innerHTML = '❌ 서버 연결 오류';
                 console.error('Health check failed:', error);
             });
     </script>
 </body>
 </html>
-EOF
