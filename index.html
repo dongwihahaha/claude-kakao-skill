@@ -1,3 +1,4 @@
+cat > index.html << 'EOF'
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -6,87 +7,87 @@
     <title>Claude AI 카카오 스킬 서버</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
             margin: 50px auto;
             padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             text-align: center;
-            background: #f0f2f5;
         }
         .container {
-            background: white;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        h1 { font-size: 2.5em; margin-bottom: 20px; }
+        .status { font-size: 1.2em; margin: 20px 0; }
+        .endpoints {
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-        .status {
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 5px;
-            background: #e8f5e8;
-            color: #2d5016;
-            border: 1px solid #c3e6c3;
-        }
-        .api-list {
-            text-align: left;
-            background: #f8f9fa;
             padding: 20px;
-            border-radius: 5px;
             margin: 20px 0;
+            text-align: left;
         }
-        .api-item {
+        .endpoint {
             margin: 10px 0;
-            padding: 8px;
-            background: #fff;
-            border-radius: 3px;
-            font-family: monospace;
-            font-size: 14px;
-        }
-        .test-btn {
-            background: #007bff;
-            color: white;
-            padding: 10px 20px;
-            border: none;
+            font-family: 'Courier New', monospace;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 8px 12px;
             border-radius: 5px;
-            text-decoration: none;
+        }
+        .test-button {
             display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
             margin: 10px;
+            transition: background 0.3s;
         }
-        .test-btn:hover {
-            background: #0056b3;
-        }
-        .footer {
-            margin-top: 30px;
-            color: #666;
-            font-size: 14px;
-        }
+        .test-button:hover { background: #45a049; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🤖 Claude AI 카카오 스킬 서버</h1>
+        <div class="status">✅ 서버가 정상적으로 작동 중입니다!</div>
         
-        <div class="status">
-            ✅ 서버가 정상적으로 작동 중입니다!
+        <div class="endpoints">
+            <h3>📡 사용 가능한 API 엔드포인트:</h3>
+            <div class="endpoint">🏥 GET /api/health - 헬스체크</div>
+            <div class="endpoint">👋 POST /api/sayHello - 기본 인사</div>
+            <div class="endpoint">💬 POST /api/chat - AI 채팅</div>
+            <div class="endpoint">🌍 POST /api/translate - 번역</div>
         </div>
+
+        <a href="/api/health" class="test-button">헬스체크 테스트</a>
         
-        <div class="api-list">
-            <h3>📡 API 엔드포인트</h3>
-            <div class="api-item">🏥 GET /api/health - 서버 상태 확인</div>
-            <div class="api-item">👋 POST /api/sayHello - 기본 인사</div>
-            <div class="api-item">💬 POST /api/chat - AI 채팅 (준비중)</div>
-        </div>
-        
-        <a href="/api/health" class="test-btn">헬스체크 테스트</a>
-        
-        <div class="footer">
-            <p><strong>카카오 챗봇 스킬 서버</strong></p>
-            <p>Claude AI + Vercel로 구동됩니다</p>
+        <div style="margin-top: 30px; font-size: 0.9em; opacity: 0.8;">
+            <p>이 서버는 카카오 챗봇 스킬용으로 제작되었습니다.</p>
+            <p>Powered by Claude AI + Vercel</p>
         </div>
     </div>
+
+    <script>
+        // 페이지 로드 시 헬스체크 상태 확인
+        fetch('/api/health')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Health check:', data);
+                if (data.status === 'OK') {
+                    document.querySelector('.status').innerHTML = 
+                        '✅ 서버 상태: 정상 | Claude API: ' + data.claude_api;
+                }
+            })
+            .catch(error => {
+                document.querySelector('.status').innerHTML = '❌ 서버 연결 확인 중...';
+                console.error('Health check failed:', error);
+            });
+    </script>
 </body>
 </html>
+EOF

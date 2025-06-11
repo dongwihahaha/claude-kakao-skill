@@ -9,12 +9,19 @@
     "deploy": "vercel"
   },
   "dependencies": {
+    "@vercel/speed-insights": "^1.2.0",
     "axios": "^1.6.0"
   },
   "engines": {
     "node": "18.x"
   },
-  "keywords": ["kakao", "chatbot", "claude", "ai", "vercel"],
+  "keywords": [
+    "kakao",
+    "chatbot",
+    "claude",
+    "ai",
+    "vercel"
+  ],
   "author": "Your Name",
   "license": "MIT"
 }
